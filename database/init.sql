@@ -31,13 +31,12 @@ CREATE TABLE Donation (
     name VARCHAR(255) NOT NULL,
     description VARCHAR(255),
     quantity INTEGER,
-    image BYTEA,
+    image_id VARCHAR(255),
     start_date DATE,
     end_date DATE,
     transport_provided BOOLEAN,
     phone VARCHAR(20),
     pick_up_point VARCHAR(255),
-    date TIMESTAMP,
     restaurant_id INTEGER REFERENCES Restaurants(restaurant_id) ON DELETE CASCADE
 );
 

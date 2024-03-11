@@ -7,6 +7,7 @@ const donationRouter = require("./routes/donation");
 app.use(cors());
 app.use(express.json());
 app.use("/api", donationRouter);
+app.use("/uploads", express.static("uploads"));
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
