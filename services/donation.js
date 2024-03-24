@@ -14,15 +14,6 @@ const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 const path = require("path");
 
-function isValidDate(dateString) {
-  const date = new Date(dateString);
-  return (
-    date &&
-    !isNaN(date.getTime()) &&
-    date.toISOString().slice(0, 10) === dateString
-  );
-}
-
 // Configure multer for file storage
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -78,9 +69,7 @@ const addDonationDB = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error("Please fill all fields");
     }
-    if (!isValidDate(start_date) || !isValidDate(end_date)) {
-      return res.status(400).json("Invalid date format");
-    }
+
     const imageId = req.file ? req.file.filename : null;
     try {
       const result = await poolQuery(addDonationQuery, [
@@ -98,7 +87,9 @@ const addDonationDB = asyncHandler(async (req, res) => {
         return res.status(500).json("Unexpected database result");
       }
 
-      res.json(`Donation ${result.rows[0].donation_id} has been created!`);
+      res
+        .status(201)
+        .json(`Donation ${result.rows[0].donation_id} has been created!`);
     } catch (err) {
       console.error("Error adding donation:", err);
       res.status(500).json("Unexpected error");
